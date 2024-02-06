@@ -31,9 +31,10 @@ export function CustomPage() {
     e.preventDefault();
    const newfile=e.target.files[0];
    if(newfile){
-    const UpadateList:any = [...fileList, newfile];
-    setFileList(UpadateList);
-    console.log(UpadateList);
+    const UpdateList:any = [...fileList, newfile];
+    setFileList(UpdateList);
+    setValue("image", UpdateList);
+    console.log(UpdateList);
    }
   }
   const ondropfile=(e:any)=>{
@@ -42,6 +43,7 @@ export function CustomPage() {
     if(newfile){
       const UpadateList:any = [...fileList, newfile];
       setFileList(UpadateList);
+      setValue("image", UpadateList);
       console.log(UpadateList);
       
      }
@@ -64,10 +66,10 @@ export function CustomPage() {
             { message: 'Please select at least one checkbox.' }
           ),
         image: 
-        z.any().refine((files) => files?.length >= 1, "Image is required.")
+        z.custom<FileList>().refine((fileList:any)=>fileList.length > 0,{message:"Image required"}),
     });
 
-    const { register, handleSubmit, formState: { errors }} = useForm<FormData>({ 
+    const { register, handleSubmit, formState: { errors } , setValue} = useForm<FormData>({ 
         resolver: zodResolver(schema),
     });
 
@@ -76,10 +78,12 @@ export function CustomPage() {
     }
 
     const remove1 = (index:number)=>{
-        const upadtelist= fileList.filter((item,id:number)=>{
+        const updatelist:any= fileList.filter((item,id:number)=>{
            return index!==id;
          })
-         setFileList(upadtelist);
+         setFileList(updatelist);
+         setValue("image", updatelist);
+         console.log(updatelist);
        }
     
   return (
@@ -190,7 +194,7 @@ export function CustomPage() {
 
             <div className={style.seventhContainer}>
                 <Label value='Product Images'/>
-                <div className={style.productImages} {...register("image")}>
+                <div className={style.productImages} >
                             {fileList?(
                         fileList.map(
                         (item:any , index:number)=>{
@@ -204,9 +208,9 @@ export function CustomPage() {
                             )
                         }
                         )
-                    ):""}
+                    ):errors.image && <span className={style.span}>{errors.image.message}</span>}
                 </div>
-                {/* {errors.image && <span className={style.span}>{errors.image.message}</span>} */}
+                {errors.image && <span className={style.span}>{errors.image.message}</span>}
             </div>
 
             <div className={style.eigthContainer} onDrop={ondropfile} onDragOver={onDragfiles}>
@@ -236,9 +240,10 @@ export function CustomPage() {
                         </p>
                         <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
                         </div>
-                        <FileInput id="dropzone-file" className="hidden" onChange={onFileDrop} accept='image/*'multiple />
+                        <FileInput id="dropzone-file" className="hidden"  accept='image/*' multiple {...register("image")} onChange={onFileDrop}  />
                     </Label>
             </div>
+            
 
             <div className={style.ninthContainer}>
             <Button type="submit">Update Product</Button>

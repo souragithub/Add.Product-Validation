@@ -247,3 +247,36 @@ bottom: 6.5px;
 cursor: pointer;
 color: red;
 }
+
+.body1{
+    width: 50vw; 
+    height: 75vh;
+    margin-left: 25%; 
+    padding-top: 16px; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    display: inline-flex;
+}
+
+.page2{
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    height: 100%;
+    width: 100%
+}
+
+.form{
+    margin: 20px 20px;
+    gap: 10px;
+    ;
+}
+
+.btnaddres{
+    display: flex;
+    gap: 15px;
+}
